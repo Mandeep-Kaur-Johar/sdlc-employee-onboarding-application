@@ -1,0 +1,38 @@
+flowchart TB
+    subgraph Users["Users"]
+        Browser["Browser React SPA"]
+    end
+    subgraph Azure["Azure Subscription"]
+        subgraph Web["Azure App Service Plan"]
+            Static["Static Web App React Build"]
+            ApiApp["App Service ASP.NET Core 8 API"]
+        end
+        subgraph DataTier["Data Tier"]
+            SQL["Azure SQL Database TDE enabled"]
+            Blob["Azure Blob Storage private container"]
+        end
+        subgraph Sec["Security"]
+            KV["Azure Key Vault"]
+            Entra["Microsoft Entra ID JWT Issuer"]
+        end
+        subgraph Obs["Observability"]
+            AI["Application Insights"]
+            LAW["Log Analytics Workspace"]
+        end
+    end
+    subgraph External["External Systems"]
+        HRIS["HR System ATS"]
+        ITSM["ITSM Platform"]
+        LMS["Learning Management System"]
+    end
+    Browser -->|HTTPS 443| Static
+    Static -->|HTTPS REST| ApiApp
+    ApiApp -->|TLS 1.2 TDS| SQL
+    ApiApp -->|HTTPS SAS| Blob
+    ApiApp -->|Managed Identity| KV
+    ApiApp -->|Validate JWT| Entra
+    ApiApp --> AI
+    AI --> LAW
+    HRIS -->|Webhook HTTPS| ApiApp
+    ApiApp -->|REST| ITSM
+    ApiApp -->|REST| LMS

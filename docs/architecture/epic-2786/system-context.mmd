@@ -1,0 +1,24 @@
+flowchart TB
+    NewEmployee["New Employee"]
+    HRCoordinator["HR Coordinator"]
+    HRSpecialist["HR Specialist"]
+    ITAdmin["IT Administrator"]
+    Manager["Hiring Manager"]
+    Portal["Employee Onboarding Application<br/>React TypeScript SPA + ASP.NET Core 8 Web API"]
+    HRIS["HR System / ATS<br/>Accepted Offer Events"]
+    ITSM["IT Service Management<br/>Provisioning Requests"]
+    LMS["Learning Management System<br/>Training Completion"]
+    Notify["Notification Service<br/>Email and Reminders"]
+    Blob["Azure Blob Storage<br/>Encrypted Documents"]
+    SQL["Azure SQL Database"]
+    NewEmployee -->|HTTPS JWT| Portal
+    HRCoordinator -->|HTTPS JWT| Portal
+    HRSpecialist -->|HTTPS JWT| Portal
+    ITAdmin -->|HTTPS JWT| Portal
+    Manager -->|HTTPS JWT| Portal
+    HRIS -->|Offer Accepted Webhook| Portal
+    Portal -->|Provisioning Request API| ITSM
+    Portal -->|Training Status API| LMS
+    Portal -->|Send Notifications| Notify
+    Portal -->|Store Documents| Blob
+    Portal -->|Persist Records| SQL

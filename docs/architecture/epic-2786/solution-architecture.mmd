@@ -1,0 +1,79 @@
+flowchart TB
+    subgraph Client["Client Layer"]
+        SPA["React 18 TypeScript SPA"]
+        OnboardUI["Onboarding Dashboard"]
+        DocUI["Document Upload and Review"]
+        TaskUI["Task Workspace"]
+        ProvUI["Provisioning Tracker"]
+        OrientUI["Orientation and Training"]
+    end
+    subgraph Edge["Edge"]
+        AppGw["Azure App Service HTTPS Only"]
+    end
+    subgraph Api["ASP.NET Core 8 Web API"]
+        AuthMw["JWT Auth and Role Middleware"]
+        OnboardCtl["OnboardingController"]
+        DocCtl["DocumentsController"]
+        TaskCtl["TasksController"]
+        ProvCtl["ProvisioningController"]
+        TrainCtl["TrainingController"]
+        NotifyCtl["NotificationsController"]
+    end
+    subgraph Domain["Application and Domain Services"]
+        OnboardSvc["OnboardingService"]
+        DocSvc["DocumentService"]
+        TaskSvc["TaskGenerationService"]
+        ProvSvc["ProvisioningService"]
+        TrainSvc["TrainingService"]
+        NotifySvc["NotificationService"]
+        RuleSvc["TaskTemplateRuleEngine"]
+    end
+    subgraph Data["Persistence"]
+        EF["EF Core 8 DbContext"]
+        SQL["Azure SQL Database"]
+        Blob["Azure Blob Storage"]
+    end
+    subgraph Ext["External Systems"]
+        HRIS["HR System ATS"]
+        ITSM["ITSM Provisioning"]
+        LMS["Learning Management System"]
+        Email["Email Provider"]
+    end
+    subgraph Ops["Cross Cutting"]
+        AppIns["Application Insights"]
+        KeyVault["Azure Key Vault"]
+    end
+    SPA --> OnboardUI
+    SPA --> DocUI
+    SPA --> TaskUI
+    SPA --> ProvUI
+    SPA --> OrientUI
+    SPA -->|HTTPS REST JSON| AppGw
+    AppGw --> AuthMw
+    AuthMw --> OnboardCtl
+    AuthMw --> DocCtl
+    AuthMw --> TaskCtl
+    AuthMw --> ProvCtl
+    AuthMw --> TrainCtl
+    AuthMw --> NotifyCtl
+    OnboardCtl --> OnboardSvc
+    DocCtl --> DocSvc
+    TaskCtl --> TaskSvc
+    ProvCtl --> ProvSvc
+    TrainCtl --> TrainSvc
+    NotifyCtl --> NotifySvc
+    TaskSvc --> RuleSvc
+    OnboardSvc --> EF
+    DocSvc --> EF
+    TaskSvc --> EF
+    ProvSvc --> EF
+    TrainSvc --> EF
+    NotifySvc --> EF
+    DocSvc --> Blob
+    EF --> SQL
+    HRIS -->|Offer Accepted Event| OnboardCtl
+    ProvSvc --> ITSM
+    TrainSvc --> LMS
+    NotifySvc --> Email
+    Api --> AppIns
+    Api --> KeyVault

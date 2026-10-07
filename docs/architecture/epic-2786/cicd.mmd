@@ -1,0 +1,23 @@
+flowchart TD
+    Dev["Developer Commit to Story Branch"]
+    PR["Draft Pull Request"]
+    Build["GitHub Actions Build"]
+    FeBuild["npm ci and vite build"]
+    BeBuild["dotnet restore build"]
+    Test["dotnet test and vitest"]
+    Scan["CodeQL and Dependency Scan"]
+    QA["QA Agent Review"]
+    Merge["Merge to main"]
+    Deploy["Deploy to Azure App Service"]
+    Smoke["Post Deployment Smoke Tests"]
+    Dev --> PR
+    PR --> Build
+    Build --> FeBuild
+    Build --> BeBuild
+    FeBuild --> Test
+    BeBuild --> Test
+    Test --> Scan
+    Scan --> QA
+    QA --> Merge
+    Merge --> Deploy
+    Deploy --> Smoke

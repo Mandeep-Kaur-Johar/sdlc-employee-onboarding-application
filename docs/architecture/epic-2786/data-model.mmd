@@ -1,0 +1,90 @@
+erDiagram
+    ONBOARDING_RECORD ||--o{ ONBOARDING_TASK : has
+    ONBOARDING_RECORD ||--o{ DOCUMENT_RECORD : collects
+    ONBOARDING_RECORD ||--o{ PROVISIONING_REQUEST : requires
+    ONBOARDING_RECORD ||--o{ TRAINING_ASSIGNMENT : assigns
+    ONBOARDING_RECORD ||--o{ MILESTONE : tracks
+    TASK_TEMPLATE ||--o{ ONBOARDING_TASK : generates
+    ONBOARDING_TASK ||--o{ NOTIFICATION : triggers
+    DOCUMENT_RECORD ||--o{ DOCUMENT_REVIEW : reviewed_by
+    ONBOARDING_RECORD {
+        uniqueidentifier Id PK
+        nvarchar CandidateEmail
+        nvarchar FirstName
+        nvarchar LastName
+        nvarchar Role
+        nvarchar Department
+        nvarchar Location
+        date StartDate
+        nvarchar Status
+        int CompletionPercentage
+        datetime2 CreatedAtUtc
+    }
+    ONBOARDING_TASK {
+        uniqueidentifier Id PK
+        uniqueidentifier OnboardingRecordId FK
+        nvarchar Title
+        nvarchar AssignedToEmail
+        nvarchar Category
+        date DueDate
+        nvarchar Status
+        bit IsEscalated
+    }
+    TASK_TEMPLATE {
+        uniqueidentifier Id PK
+        nvarchar Title
+        nvarchar Role
+        nvarchar Department
+        nvarchar Location
+        int OffsetDays
+        nvarchar AssigneeRole
+    }
+    DOCUMENT_RECORD {
+        uniqueidentifier Id PK
+        uniqueidentifier OnboardingRecordId FK
+        nvarchar DocumentType
+        nvarchar FileName
+        nvarchar BlobPath
+        nvarchar Status
+        datetime2 UploadedAtUtc
+    }
+    DOCUMENT_REVIEW {
+        uniqueidentifier Id PK
+        uniqueidentifier DocumentRecordId FK
+        nvarchar ReviewerEmail
+        nvarchar Decision
+        nvarchar Comments
+        datetime2 ReviewedAtUtc
+    }
+    PROVISIONING_REQUEST {
+        uniqueidentifier Id PK
+        uniqueidentifier OnboardingRecordId FK
+        nvarchar ItemType
+        nvarchar SystemName
+        nvarchar ExternalTicketId
+        nvarchar Status
+        datetime2 CompletedAtUtc
+    }
+    TRAINING_ASSIGNMENT {
+        uniqueidentifier Id PK
+        uniqueidentifier OnboardingRecordId FK
+        nvarchar CourseCode
+        nvarchar CourseName
+        nvarchar Status
+        datetime2 CompletedAtUtc
+    }
+    MILESTONE {
+        uniqueidentifier Id PK
+        uniqueidentifier OnboardingRecordId FK
+        nvarchar Name
+        nvarchar Status
+        date TargetDate
+    }
+    NOTIFICATION {
+        uniqueidentifier Id PK
+        uniqueidentifier OnboardingTaskId FK
+        nvarchar Recipient
+        nvarchar Channel
+        nvarchar Kind
+        datetime2 SentAtUtc
+    }

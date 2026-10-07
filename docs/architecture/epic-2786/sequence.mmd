@@ -1,0 +1,27 @@
+sequenceDiagram
+    participant HRIS as HR System ATS
+    participant API as Onboarding Web API
+    participant ONB as OnboardingService
+    participant RULE as TaskTemplateRuleEngine
+    participant DB as Azure SQL
+    participant NOTE as NotificationService
+    participant EMP as New Employee SPA
+    participant BLOB as Blob Storage
+    participant HR as HR Specialist
+    HRIS->>API: POST /api/onboarding/offer-accepted
+    API->>ONB: CreateFromAcceptedOffer(payload)
+    ONB->>DB: Insert OnboardingRecord status Initiated
+    ONB->>RULE: GenerateTasks(role, department, location)
+    RULE->>DB: Insert OnboardingTasks from templates
+    ONB->>NOTE: Queue welcome and task notifications
+    NOTE-->>EMP: Email portal invitation
+    EMP->>API: GET /api/portal/me (JWT)
+    API-->>EMP: Tasks, documents, orientation content
+    EMP->>API: POST /api/documents/upload
+    API->>BLOB: Store encrypted document
+    API->>DB: Save DocumentRecord status Submitted
+    HR->>API: POST /api/documents/{id}/review approve or reject
+    API->>DB: Update status and audit entry
+    API->>NOTE: Notify employee of outcome
+    NOTE-->>EMP: Resubmission or approval notice
+    API->>DB: Recalculate completion percentage

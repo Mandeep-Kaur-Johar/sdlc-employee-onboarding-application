@@ -1,0 +1,30 @@
+flowchart TB
+    subgraph Frontend["React TypeScript Modules"]
+        ApiClient["apiClient axios JWT interceptor"]
+        AuthCtx["AuthContext role aware"]
+        Pages["Pages Dashboard Documents Tasks Provisioning Orientation"]
+        Hooks["Feature Hooks useOnboarding useTasks useDocuments"]
+    end
+    subgraph Backend["Backend Modules"]
+        Controllers["Controllers Layer"]
+        Services["Services Layer"]
+        Repos["Repositories Layer"]
+        Dtos["DTO Contracts and Validators"]
+        Entities["Domain Entities"]
+    end
+    subgraph Workers["Background Processing"]
+        Reminder["Overdue Task Reminder Worker"]
+        Escalation["Escalation Worker"]
+    end
+    Store["Azure SQL and Blob Storage"]
+    Pages --> Hooks
+    Hooks --> ApiClient
+    AuthCtx --> ApiClient
+    ApiClient -->|REST JSON| Controllers
+    Controllers --> Dtos
+    Controllers --> Services
+    Services --> Repos
+    Services --> Entities
+    Repos --> Store
+    Reminder --> Services
+    Escalation --> Services
