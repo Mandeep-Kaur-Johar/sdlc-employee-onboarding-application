@@ -1,0 +1,26 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+App_Data/
+
+# Node
+node_modules/
+dist/
+coverage/
+npm-debug.log*
+.vite/
+
+# Environment and secrets
+.env
+.env.*
+*.pfx
+appsettings.Local.json
+
+# Editors and OS
+.vs/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
